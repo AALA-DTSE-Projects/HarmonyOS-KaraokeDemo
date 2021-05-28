@@ -65,7 +65,7 @@ public class HandleRemote extends RemoteObject implements IRemoteBroker {
                 }
             case PLAY_COMMAND:
                 if (remoteService != null) {
-                    remoteService.playAudio(data.readByteArray());
+                    remoteService.playAudio(data.getBytes());
                 }
                 return true;
             case STOP_PLAY_COMMAND:

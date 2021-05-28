@@ -48,7 +48,7 @@ public class HandleRemoteProxy implements IRemoteBroker {
         MessageParcel data = MessageParcel.obtain();
         MessageParcel reply = MessageParcel.obtain();
         MessageOption option = new MessageOption(MessageOption.TF_SYNC);
-        data.writeByteArray(bytes);
+        data.writeBytes(bytes);
         try {
             remote.sendRequest(PLAY_COMMAND, data, reply, option);
         } catch (RemoteException e) {
