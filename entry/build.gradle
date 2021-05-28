@@ -1,0 +1,32 @@
+apply plugin: 'com.huawei.ohos.hap'
+apply plugin: 'com.huawei.ohos.decctest'
+ohos {
+    compileSdkVersion 4
+    defaultConfig {
+        compatibleSdkVersion 4
+    }
+    buildTypes {
+        release {
+            proguardOpt {
+                proguardEnabled false
+                rulesFiles 'proguard-rules.pro'
+            }
+        }
+    }
+    
+}
+
+tasks.withType(JavaCompile){
+    options.compilerArgs +=["-AeventBusIndex=org.greenrobot.eventbus.MyEventBusIndex"]
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.har'])
+    testImplementation 'junit:junit:4.13'
+    implementation 'io.openharmony.tpc.thirdlib:EventBus:1.0.4'
+    annotationProcessor 'io.openharmony.tpc.thirdlib:eventbus-annotation-processor:1.0.1'
+    ohosTestImplementation 'com.huawei.ohos.testkit:runner:1.0.0.100'
+}
+decc {
+    supportType = ['html','xml']
+}
