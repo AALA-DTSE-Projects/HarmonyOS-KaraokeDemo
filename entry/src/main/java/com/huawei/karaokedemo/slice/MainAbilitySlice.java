@@ -179,7 +179,7 @@ public class MainAbilitySlice extends AbilitySlice {
         AudioStreamInfo audioStreamInfo =
                 new AudioStreamInfo.Builder()
                         .encodingFormat(AudioStreamInfo.EncodingFormat.ENCODING_PCM_16BIT)
-                        .channelMask(AudioStreamInfo.ChannelMask.CHANNEL_IN_STEREO)
+                        .channelMask(AudioStreamInfo.ChannelMask.CHANNEL_IN_MONO)
                         .sampleRate(Const.AUDIO_SAMPLE_RATE)
                         .streamUsage(AudioStreamInfo.StreamUsage.STREAM_USAGE_MEDIA)
                         .build();
