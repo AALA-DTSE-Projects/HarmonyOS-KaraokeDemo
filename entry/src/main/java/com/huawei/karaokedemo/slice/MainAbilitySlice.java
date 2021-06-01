@@ -110,6 +110,9 @@ public class MainAbilitySlice extends AbilitySlice {
         switch (event.getPermission()) {
             case SystemPermission.MICROPHONE:
                 initAudioCapture();
+                if (remoteProxy != null) {
+                    remoteProxy.startPlay();
+                }
                 ThreadPoolManager.getInstance().execute(audioCapture);
                 break;
             case SystemPermission.DISTRIBUTED_DATASYNC:
