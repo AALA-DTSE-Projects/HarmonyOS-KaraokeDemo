@@ -184,7 +184,7 @@ public class MainAbilitySlice extends AbilitySlice {
                         .encodingFormat(AudioStreamInfo.EncodingFormat.ENCODING_PCM_16BIT)
                         .channelMask(AudioStreamInfo.ChannelMask.CHANNEL_IN_MONO)
                         .sampleRate(Const.AUDIO_SAMPLE_RATE)
-                        .streamUsage(AudioStreamInfo.StreamUsage.STREAM_USAGE_MEDIA)
+                        .streamUsage(AudioStreamInfo.StreamUsage.STREAM_USAGE_VOICE_COMMUNICATION)
                         .build();
         AudioCapturerInfo audioCapturerInfo =
                 new AudioCapturerInfo.Builder()
