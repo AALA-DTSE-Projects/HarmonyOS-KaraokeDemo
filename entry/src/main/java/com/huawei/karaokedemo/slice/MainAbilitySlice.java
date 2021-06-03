@@ -16,6 +16,8 @@ import ohos.agp.window.dialog.ToastDialog;
 import ohos.bundle.AbilityInfo;
 import ohos.bundle.ElementName;
 import ohos.bundle.IBundleManager;
+import ohos.distributedschedule.interwork.DeviceManager;
+import ohos.distributedschedule.interwork.IInitCallback;
 import ohos.media.audio.AudioCapturer;
 import ohos.media.audio.AudioCapturerInfo;
 import ohos.media.audio.AudioStreamInfo;
@@ -216,8 +218,18 @@ public class MainAbilitySlice extends AbilitySlice {
                     IBundleManager.GET_BUNDLE_DEFAULT,
                     0);
             if (abilityInfoList != null && !abilityInfoList.isEmpty()) {
-                connectAbility(intent, connection);
-                LogUtil.info(TAG, "connect service on tablet with id " + deviceId );
+                DeviceManager.initDistributedEnvironment(deviceId, new IInitCallback() {
+                    @Override
+                    public void onInitSuccess(String s) {
+                        connectAbility(intent, connection);
+                        LogUtil.info(TAG, "connect service on tablet with id " + deviceId );
+                    }
+
+                    @Override
+                    public void onInitFailure(String s, int i) {
+                        showToast("Cannot connect service on tablet");
+                    }
+                });
             } else {
                 showToast("Cannot connect service on tablet");
             }
