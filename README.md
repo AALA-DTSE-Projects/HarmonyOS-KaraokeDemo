@@ -13,4 +13,4 @@
 - Open the entry module and click connect button to connect with the Android app on tablet
 
 ## Demo result
-![](screenshot/VID_20210607_122627.mp4)
+- Please check the screenshot folder to view the video.
