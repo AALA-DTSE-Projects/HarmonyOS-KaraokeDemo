@@ -7,7 +7,10 @@
 
 ## How to deploy
 - Connect your mobile phone and deploy entry module
-- Connect your tablet and deploy controller module and [Android app](https://codehub-g.huawei.com/HarmonyOS/Android-KaraokeDemo/home)
+- Connect your tablet and deploy controller module and [Android app](https://github.com/AALA-DTSE-Projects/Android-KaraokeDemo)
 - Connect all the devices in the same WIFI network
 - Login with the same Huawei ID on all devices
 - Open the entry module and click connect button to connect with the Android app on tablet
+
+## Demo result
+![](screenshot/VID_20210607_122627.mp4)
