@@ -5,7 +5,7 @@ import ohos.rpc.*;
 public abstract class AudioServiceStub extends RemoteObject implements IAudioInterface {
 
     static final String DESCRIPTOR = "jp.huawei.karaokedemo.IAudioInterface";
-    static final int SET_LYRICS_COMMAND = IRemoteObject.MIN_TRANSACTION_ID;
+    static final int CONNECT_COMMAND = IRemoteObject.MIN_TRANSACTION_ID;
     static final int START_PLAY_COMMAND = IRemoteObject.MIN_TRANSACTION_ID + 1;
     static final int PLAY_COMMAND = IRemoteObject.MIN_TRANSACTION_ID + 2;
     static final int STOP_PLAY_COMMAND = IRemoteObject.MIN_TRANSACTION_ID + 3;
@@ -39,16 +39,14 @@ public abstract class AudioServiceStub extends RemoteObject implements IAudioInt
             return false;
         }
         switch (code) {
-            case SET_LYRICS_COMMAND:
-                String lyrics = data.readString();
-                setLyrics(lyrics);
+            case CONNECT_COMMAND:
+                connect(data.readString());
                 return true;
             case START_PLAY_COMMAND:
                 startPlay();
                 return true;
             case PLAY_COMMAND:
-                byte[] buffer = data.readByteArray();
-                playAudio(buffer);
+                playAudio(data.readByteArray());
                 return true;
             case STOP_PLAY_COMMAND:
                 stopPlay();

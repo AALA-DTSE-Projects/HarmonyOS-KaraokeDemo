@@ -6,16 +6,24 @@ import com.huawei.karaokedemo.controller.Const;
 import com.huawei.karaokedemo.controller.HandleRemoteProxy;
 import com.huawei.karaokedemo.controller.LogUtil;
 import com.huawei.karaokedemo.controller.ThreadPoolManager;
+import com.huawei.karaokedemo.model.DisconnectEvent;
 import com.huawei.karaokedemo.model.GrantPermissionEvent;
 import ohos.aafwk.ability.AbilitySlice;
 import ohos.aafwk.ability.IAbilityConnection;
 import ohos.aafwk.content.Intent;
+import ohos.aafwk.content.IntentParams;
 import ohos.aafwk.content.Operation;
+import ohos.agp.components.ComponentContainer;
 import ohos.agp.components.Image;
+import ohos.agp.window.dialog.CommonDialog;
+import ohos.agp.window.dialog.IDialog;
 import ohos.agp.window.dialog.ToastDialog;
 import ohos.bundle.AbilityInfo;
 import ohos.bundle.ElementName;
 import ohos.bundle.IBundleManager;
+import ohos.data.distributed.common.KvManagerConfig;
+import ohos.data.distributed.common.KvManagerFactory;
+import ohos.distributedschedule.interwork.DeviceInfo;
 import ohos.distributedschedule.interwork.DeviceManager;
 import ohos.distributedschedule.interwork.IInitCallback;
 import ohos.media.audio.AudioCapturer;
@@ -36,6 +44,7 @@ public class MainAbilitySlice extends AbilitySlice {
     private Image recordButton;
     private final int REQUEST_LIST_DEVICE = 0;
     private String deviceId;
+    private DeviceInfo.DeviceType deviceType;
     private AudioCapturer audioCapturer;
     private HandleRemoteProxy remoteProxy;
 
@@ -59,7 +68,11 @@ public class MainAbilitySlice extends AbilitySlice {
         public void onAbilityConnectDone(ElementName elementName, IRemoteObject remote, int resultCode) {
             remoteProxy = new HandleRemoteProxy(remote);
             LogUtil.info(TAG, "ability connect done!");
-            remoteProxy.start();
+            String localDeviceId = KvManagerFactory.getInstance()
+                    .createKvManager(new KvManagerConfig(MainAbilitySlice.this))
+                    .getLocalDeviceInfo()
+                    .getId();
+            remoteProxy.start(localDeviceId);
         }
 
         @Override
@@ -78,11 +91,16 @@ public class MainAbilitySlice extends AbilitySlice {
     @Override
     protected void onResult(int requestCode, Intent resultIntent) {
         if (requestCode == REQUEST_LIST_DEVICE) {
-            Object obj = resultIntent.getParams().getParam(Const.DEVICE_ID_KEY);
-            if (obj instanceof String) {
-                deviceId = (String) obj;
-                connectToRemoteService();
+            IntentParams params = resultIntent.getParams();
+            Object deviceIdObj = params.getParam(Const.DEVICE_ID_KEY);
+            if (deviceIdObj instanceof String) {
+                deviceId = (String) deviceIdObj;
             }
+            Object deviceTypeObj = params.getParam(Const.DEVICE_TYPE_KEY);
+            if (deviceTypeObj instanceof DeviceInfo.DeviceType) {
+                deviceType = (DeviceInfo.DeviceType) deviceTypeObj;
+            }
+            connectToRemoteService();
         } else {
             super.onResult(requestCode, resultIntent);
         }
@@ -97,7 +115,9 @@ public class MainAbilitySlice extends AbilitySlice {
     @Override
     protected void onBackPressed() {
         super.onBackPressed();
-        remoteProxy.finish();
+        if (remoteProxy != null) {
+            remoteProxy.finish();
+        }
         EventBus.getDefault().unregister(this);
         disconnectAbility(connection);
         if (isRecording) {
@@ -121,6 +141,17 @@ public class MainAbilitySlice extends AbilitySlice {
                 gotoDeviceListScreen();
                 break;
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDisconnectEvent(DisconnectEvent event) {
+        CommonDialog dialog = new CommonDialog(this);
+        dialog.setTitleText("Notification");
+        dialog.setContentText("Remote device has been disconnected");
+        dialog.setButton(IDialog.BUTTON3, "OK", (iDialog, code) -> iDialog.destroy());
+        dialog.setSize(ComponentContainer.LayoutConfig.MATCH_CONTENT, ComponentContainer.LayoutConfig.MATCH_CONTENT);
+        dialog.show();
+        disconnectAbility(connection);
     }
 
     private void setupUI() {
@@ -218,20 +249,24 @@ public class MainAbilitySlice extends AbilitySlice {
                     IBundleManager.GET_BUNDLE_DEFAULT,
                     0);
             if (abilityInfoList != null && !abilityInfoList.isEmpty()) {
-                DeviceManager.initDistributedEnvironment(deviceId, new IInitCallback() {
-                    @Override
-                    public void onInitSuccess(String s) {
-                        connectAbility(intent, connection);
-                        LogUtil.info(TAG, "connect service on tablet with id " + deviceId );
-                    }
+                if (deviceType == DeviceInfo.DeviceType.SMART_TV) {
+                    connectAbility(intent, connection);
+                } else {
+                    DeviceManager.initDistributedEnvironment(deviceId, new IInitCallback() {
+                        @Override
+                        public void onInitSuccess(String s) {
+                            connectAbility(intent, connection);
+                            LogUtil.info(TAG, "connect service on " + deviceType + " with id " + deviceId);
+                        }
 
-                    @Override
-                    public void onInitFailure(String s, int i) {
-                        showToast("Cannot connect service on tablet");
-                    }
-                });
+                        @Override
+                        public void onInitFailure(String s, int i) {
+                            showToast("Cannot connect service on " + deviceType + " with error " + s + " and error code is " + i);
+                        }
+                    });
+                }
             } else {
-                showToast("Cannot connect service on tablet");
+                showToast("Cannot connect service on " + deviceType.name());
             }
         } catch (RemoteException e) {
             e.printStackTrace();

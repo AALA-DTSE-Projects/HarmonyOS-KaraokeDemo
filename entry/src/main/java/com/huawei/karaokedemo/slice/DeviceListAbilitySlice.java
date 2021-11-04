@@ -84,6 +84,7 @@ public class DeviceListAbilitySlice extends AbilitySlice {
         Intent intent = new Intent();
         IntentParams params = new IntentParams();
         params.setParam(Const.DEVICE_ID_KEY, deviceInfo.getDeviceId());
+        params.setParam(Const.DEVICE_TYPE_KEY, deviceInfo.getDeviceType());
         intent.setParams(params);
         setResult(intent);
         onBackPressed();

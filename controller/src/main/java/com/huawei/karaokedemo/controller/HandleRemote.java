@@ -12,19 +12,20 @@ import ohos.rpc.*;
 public class HandleRemote extends RemoteObject implements IRemoteBroker {
     private final String TAG = HandleRemote.class.getName();
     private static final int START_COMMAND = IRemoteObject.MIN_TRANSACTION_ID;
-    private static final int SET_LYRICS_COMMAND = IRemoteObject.MIN_TRANSACTION_ID + 1;
-    private static final int START_PLAY_COMMAND = IRemoteObject.MIN_TRANSACTION_ID + 2;
-    private static final int PLAY_COMMAND = IRemoteObject.MIN_TRANSACTION_ID + 3;
-    private static final int STOP_PLAY_COMMAND = IRemoteObject.MIN_TRANSACTION_ID + 4;
-    private static final int FINISH_COMMAND = IRemoteObject.MIN_TRANSACTION_ID + 5;
+    private static final int START_PLAY_COMMAND = IRemoteObject.MIN_TRANSACTION_ID + 1;
+    private static final int PLAY_COMMAND = IRemoteObject.MIN_TRANSACTION_ID + 2;
+    private static final int STOP_PLAY_COMMAND = IRemoteObject.MIN_TRANSACTION_ID + 3;
+    private static final int FINISH_COMMAND = IRemoteObject.MIN_TRANSACTION_ID + 4;
     private final Ability ability;
     private boolean isConnected;
+    private String deviceId;
     private IAudioInterface remoteService;
 
     private final IAbilityConnection connection = new IAbilityConnection() {
         @Override
         public void onAbilityConnectDone(ElementName elementName, IRemoteObject remote, int resultCode) {
             remoteService = AudioServiceStub.asInterface(remote);
+            remoteService.connect(deviceId);
             LogUtil.info(TAG, "Android service connect done!");
         }
 
@@ -36,7 +37,7 @@ public class HandleRemote extends RemoteObject implements IRemoteBroker {
     };
 
     public HandleRemote(Ability ability) {
-        super("Game remote");
+        super("Karaoke handle remote");
         this.ability = ability;
     }
 
@@ -51,12 +52,8 @@ public class HandleRemote extends RemoteObject implements IRemoteBroker {
             case START_COMMAND:
                 if (!isConnected) {
                     startAndroidApp();
+                    deviceId = data.readString();
                     connectToAndroidService();
-                }
-                return true;
-            case SET_LYRICS_COMMAND:
-                if (remoteService != null) {
-                    remoteService.setLyrics(data.readString());
                 }
                 return true;
             case START_PLAY_COMMAND:

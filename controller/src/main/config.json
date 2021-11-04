@@ -17,12 +17,15 @@
     "package": "com.huawei.karaokedemo",
     "name": ".MyApplication",
     "deviceType": [
-      "tablet"
+      "tablet",
+      "phone",
+      "tv"
     ],
     "distro": {
       "deliveryWithInstall": true,
       "moduleName": "controller",
-      "moduleType": "entry"
+      "moduleType": "entry",
+      "installationFree": true
     },
     "abilities": [
       {
@@ -46,12 +49,27 @@
       },
       {
         "backgroundModes": [
-          "multiDeviceConnection"
+          "multiDeviceConnection",
+          "bluetoothInteraction",
+          "wifiInteraction"
         ],
+        "visible": true,
         "name": "com.huawei.karaokedemo.ControllerServiceAbility",
         "icon": "$media:icon",
         "description": "$string:controllerserviceability_description",
         "type": "service"
+      },
+      {
+        "backgroundModes": [
+          "bluetoothInteraction",
+          "wifiInteraction",
+          "multiDeviceConnection"
+        ],
+        "name": "com.huawei.karaokedemo.ResultServiceAbility",
+        "icon": "$media:icon",
+        "description": "$string:resultserviceability_description",
+        "type": "service",
+        "visible": true
       }
     ],
     "reqPermissions": [

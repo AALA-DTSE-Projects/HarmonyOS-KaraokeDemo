@@ -16,18 +16,18 @@ public class AudioServiceProxy implements IAudioInterface {
     }
 
     @Override
-    public void setLyrics(String lyrics) {
+    public void connect(String deviceId) {
         MessageParcel data = MessageParcel.obtain();
         MessageParcel reply = MessageParcel.obtain();
         MessageOption option = new MessageOption(MessageOption.TF_SYNC);
 
         data.writeInterfaceToken(AudioServiceStub.DESCRIPTOR);
-        data.writeString(lyrics);
+        data.writeString(deviceId);
 
         try {
-            remoteObject.sendRequest(AudioServiceStub.SET_LYRICS_COMMAND, data, reply, option);
+            remoteObject.sendRequest(AudioServiceStub.CONNECT_COMMAND, data, reply, option);
         } catch (RemoteException e) {
-            LogUtil.error(TAG, "set lyrics action error " + e.getMessage());
+            LogUtil.error(TAG, "start action error " + e.getMessage());
         } finally {
             data.reclaim();
             reply.reclaim();
