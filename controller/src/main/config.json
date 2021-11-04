@@ -24,8 +24,7 @@
     "distro": {
       "deliveryWithInstall": true,
       "moduleName": "controller",
-      "moduleType": "entry",
-      "installationFree": true
+      "moduleType": "entry"
     },
     "abilities": [
       {
