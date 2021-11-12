@@ -17,34 +17,24 @@
     "package": "com.huawei.karaokedemo",
     "name": ".MyApplication",
     "deviceType": [
-      "tablet",
-      "phone",
       "tv"
     ],
     "distro": {
       "deliveryWithInstall": true,
       "moduleName": "controller",
-      "moduleType": "entry"
+      "moduleType": "feature",
+      "installationFree":  true
     },
     "abilities": [
       {
-        "skills": [
-          {
-            "entities": [
-              "entity.system.home"
-            ],
-            "actions": [
-              "action.system.home"
-            ]
-          }
-        ],
         "orientation": "unspecified",
         "name": "com.huawei.karaokedemo.MainAbility",
         "icon": "$media:icon",
         "description": "$string:mainability_description",
         "label": "$string:app_name",
         "type": "page",
-        "launchType": "standard"
+        "launchType": "standard",
+        "visible": true
       },
       {
         "backgroundModes": [

@@ -12,10 +12,13 @@ public class MainAbilitySlice extends AbilitySlice {
     public void onStart(Intent intent) {
         super.onStart(intent);
         super.setUIContent(ResourceTable.Layout_ability_main);
-        requestPermissions(SystemPermission.DISTRIBUTED_DATASYNC);
+        if (requestPermissions(SystemPermission.DISTRIBUTED_DATASYNC)) {
+            terminateAbility();
+        };
     }
 
-    private void requestPermissions(String... permissions) {
+    private boolean requestPermissions(String... permissions) {
+        boolean isGranted = true;
         for (String permission : permissions) {
             if (verifyCallingOrSelfPermission(permission) != IBundleManager.PERMISSION_GRANTED) {
                 requestPermissionsFromUser(
@@ -23,7 +26,9 @@ public class MainAbilitySlice extends AbilitySlice {
                                 permission
                         },
                         MainAbility.REQUEST_CODE);
+                isGranted = false;
             }
         }
+        return isGranted;
     }
 }

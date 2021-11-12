@@ -1,1 +1,1 @@
-include ':entry', ':controller'
+include ':entry', ':controller', ':plugin'

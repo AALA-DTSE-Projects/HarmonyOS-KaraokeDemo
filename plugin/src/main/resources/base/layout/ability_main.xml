@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DependentLayout
+    xmlns:ohos="http://schemas.huawei.com/res/ohos"
+    ohos:height="match_parent"
+    ohos:width="match_parent"
+    ohos:alignment="center"
+    ohos:orientation="vertical" >
+
+    <Text
+        ohos:id="$+id:title"
+        ohos:height="match_content"
+        ohos:width="match_content"
+        ohos:text_color="#000000"
+        ohos:text="Notification"
+        ohos:horizontal_center="true"
+        ohos:text_size="40fp" />
+
+    <Text
+        ohos:id="$+id:content"
+        ohos:height="match_content"
+        ohos:width="match_parent"
+        ohos:margin="10fp"
+        ohos:text_color="#000000"
+        ohos:below="$id:title"
+        ohos:text="This is the Karaoke Plugin"
+        ohos:horizontal_center="true"
+        ohos:text_size="30fp" />
+
+    <Text
+        ohos:id="$+id:desc"
+        ohos:height="match_content"
+        ohos:width="match_parent"
+        ohos:multiple_lines="true"
+        ohos:margin="10fp"
+        ohos:text_color="#000000"
+        ohos:below="$id:content"
+        ohos:text="Please install the TV app on AppGallery to complete the installation"
+        ohos:horizontal_center="true"
+        ohos:text_size="30fp" />
+
+    <Image
+        ohos:id="$+id:store_button"
+        ohos:height="match_content"
+        ohos:width="match_content"
+        ohos:padding="8fp"
+        ohos:image_src="$media:app_gallery"
+        ohos:below="$id:desc"
+        ohos:center_in_parent="true" />
+
+</DependentLayout>

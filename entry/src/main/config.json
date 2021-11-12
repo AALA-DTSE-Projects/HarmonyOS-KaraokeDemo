@@ -17,14 +17,13 @@
     "name": ".MyApplication",
     "deviceType": [
       "phone",
-      "tablet",
-      "tv"
+      "tablet"
     ],
     "distro": {
       "deliveryWithInstall": true,
       "moduleName": "entry",
       "moduleType": "entry",
-      "installationFree": true
+      "installationFree": false
     },
     "abilities": [
       {

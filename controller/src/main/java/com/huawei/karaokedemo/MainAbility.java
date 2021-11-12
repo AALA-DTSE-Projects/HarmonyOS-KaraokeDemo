@@ -23,6 +23,7 @@ public class MainAbility extends Ability {
         if (requestCode == REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == IBundleManager.PERMISSION_GRANTED) {
                 LogUtil.debug(TAG, "Permission granted");
+                terminateAbility();
             } else {
                 new ToastDialog(this).setText("Permission is required to proceed").show();
                 getMainTaskDispatcher().delayDispatch(this::terminateAbility, TERMINATE_DELAY_TIME);
